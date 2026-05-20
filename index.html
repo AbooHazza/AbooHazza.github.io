@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moyed Alaybani — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --bg2: #141414;
+    --bg3: #1a1a1a;
+    --border: #2a2a2a;
+    --coral: #D85A30;
+    --coral-light: #F0997B;
+    --coral-dim: #993C1D;
+    --coral-bg: rgba(216,90,48,0.08);
+    --coral-bg2: rgba(216,90,48,0.14);
+    --text: #e8e0d8;
+    --text2: #9a9080;
+    --text3: #5a5248;
+    --green: #28C840;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  ::selection { background: var(--coral); color: #fff; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none; z-index: 9999;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--coral);
+    animation: blink 1s step-end infinite;
+    vertical-align: middle; margin-left: 2px;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .window {
+    max-width: 900px;
+    margin: 30px auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  .titlebar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 11px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    user-select: none;
+  }
+  .dots { display: flex; gap: 7px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; transition: opacity 0.2s; }
+  .dot.r { background: #FF5F57; }
+  .dot.y { background: #FEBC2E; }
+  .dot.g { background: #28C840; }
+  .titlebar-title { font-size: 12px; color: var(--text3); }
+  .online-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--green); }
+  .online-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .nav {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .nav-btn {
+    font-family: var(--mono);
+    font-size: 12px; background: transparent;
+    border: 1px solid transparent;
+    color: var(--text2); cursor: pointer;
+    padding: 5px 12px; border-radius: 5px;
+    transition: all 0.15s; letter-spacing: 0.02em;
+  }
+  .nav-btn:hover { border-color: var(--border); color: var(--text); background: var(--bg3); }
+  .nav-btn.active { border-color: var(--coral-dim); color: var(--coral-light); background: var(--coral-bg); }
+
+  .content { padding: 28px 30px; min-height: 520px; }
+  .sec { display: none; animation: fadeIn 0.2s ease; }
+  .sec.active { display: block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+  /* PROMPT — no cat/dev/$ */
+  .prompt { margin-bottom: 18px; }
+  .p-user { color: var(--coral); }
+  .p-sep { color: var(--text3); }
+  .p-path { color: var(--coral-light); }
+
+  .ascii {
+    font-size: 10px; color: var(--coral-light);
+    line-height: 1.25; white-space: pre; margin-bottom: 6px;
+    opacity: 0; animation: fadeIn 0.4s 0.1s ease both;
+  }
+  .ascii-sub {
+    font-size: 11px; color: var(--text3); margin-bottom: 24px; padding-left: 2px;
+    opacity: 0; animation: fadeIn 0.4s 0.2s ease both;
+  }
+
+  .info-table { display: grid; grid-template-columns: 110px 1fr; gap: 8px 16px; margin-bottom: 20px; font-size: 12px; }
+  .il { color: var(--text3); }
+  .iv { color: var(--text); }
+  .iv.acc { color: var(--coral); }
+
+  .bio {
+    border-left: 2px solid var(--coral-dim);
+    padding: 8px 0 8px 14px;
+    color: var(--text2); font-size: 12px; line-height: 1.8; margin-bottom: 22px;
+  }
+  .bio strong { color: var(--text); font-weight: 400; }
+
+  .focus-item { font-size: 12px; color: var(--text2); margin-bottom: 5px; }
+  .focus-item::before { content: '→ '; color: var(--coral); }
+
+  .sec-header {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: var(--text3);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px; margin-bottom: 14px;
+  }
+  .sec-title { color: var(--text2); }
+
+  /* CERT */
+  .cert-card {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 10px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .cert-card:hover { border-color: var(--coral-dim); background: var(--bg3); }
+  .cert-left { flex: 1; }
+  .cert-name { font-size: 12px; color: var(--text); margin-bottom: 3px; }
+  .cert-issuer { font-size: 11px; color: var(--text3); margin-bottom: 8px; }
+  .cert-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .cert-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 80px; }
+  .cert-badge {
+    background: var(--coral-bg2); color: var(--coral-light);
+    border: 1px solid var(--coral-dim);
+    font-size: 10px; padding: 2px 8px; border-radius: 4px;
+  }
+  .tag {
+    background: var(--coral-bg); color: var(--coral-light);
+    border: 1px solid rgba(216,90,48,0.2);
+    font-size: 10px; padding: 1px 7px; border-radius: 4px;
+    font-family: var(--mono);
+  }
+
+  /* REPO */
+  .repo-card {
+    display: block; text-decoration: none;
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; margin-bottom: 10px;
+    background: var(--bg2);
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  }
+  .repo-card:hover { border-color: var(--coral-dim); background: var(--bg3); transform: translateX(4px); }
+  .repo-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+  .repo-name { color: var(--coral-light); font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .repo-arrow { color: var(--text3); font-size: 11px; transition: color 0.2s; }
+  .repo-card:hover .repo-arrow { color: var(--coral); }
+  .repo-desc { font-size: 11px; color: var(--text2); margin-bottom: 8px; line-height: 1.6; }
+  .repo-footer { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .lang-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .lang-label { font-size: 11px; color: var(--text3); margin-right: 4px; }
+
+  /* STACK */
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+  .stack-group {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px; transition: border-color 0.2s;
+  }
+  .stack-group:hover { border-color: var(--coral-dim); }
+  .stack-title { font-size: 10px; color: var(--text3); margin-bottom: 10px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .stag {
+    display: inline-block;
+    background: var(--coral-bg); color: var(--coral-light);
+    border: 1px solid rgba(216,90,48,0.2);
+    border-radius: 4px; padding: 2px 9px; font-size: 11px; margin: 2px 2px 2px 0;
+    font-family: var(--mono); transition: background 0.15s;
+  }
+  .stag:hover { background: var(--coral-bg2); }
+
+  /* GOALS */
+  .goal-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+    font-size: 12px; transition: padding-left 0.2s;
+  }
+  .goal-item:hover { padding-left: 4px; }
+  .goal-item:last-child { border-bottom: none; }
+  .goal-num { color: var(--coral-dim); min-width: 20px; font-size: 11px; margin-top: 1px; }
+  .goal-body { flex: 1; }
+  .goal-name { color: var(--coral-light); margin-bottom: 2px; }
+  .goal-desc { color: var(--text2); font-size: 11px; line-height: 1.6; }
+  .goal-status {
+    font-size: 10px; padding: 1px 7px; border-radius: 4px;
+    white-space: nowrap; align-self: flex-start; margin-top: 2px;
+  }
+  .status-active { background: rgba(40,200,64,0.1); color: #28C840; border: 1px solid rgba(40,200,64,0.3); }
+  .status-next { background: var(--bg3); color: var(--text3); border: 1px solid var(--border); }
+  .status-done { background: var(--coral-bg2); color: var(--coral-dim); border: 1px solid rgba(216,90,48,0.3); }
+
+  /* CONTACT */
+  .contact-link {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 16px;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 8px;
+    font-size: 12px; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    text-decoration: none; color: inherit;
+  }
+  .contact-link:hover { border-color: var(--coral-dim); background: var(--bg3); transform: translateX(4px); }
+  .contact-icon { color: var(--coral); font-size: 16px; width: 22px; text-align: center; }
+  .contact-lbl { color: var(--text3); min-width: 80px; }
+  .contact-val { color: var(--text); flex: 1; }
+  .contact-arr { color: var(--text3); font-size: 11px; transition: color 0.2s; }
+  .contact-link:hover .contact-arr { color: var(--coral); }
+  .contact-note { font-size: 11px; color: var(--text3); line-height: 2; margin-top: 16px; padding-left: 2px; }
+  .contact-note span { color: var(--coral); }
+
+  /* ABOUT hero */
+  .hero-role { font-size: 15px; color: var(--coral); margin-bottom: 10px; }
+  .hero-bio { color: var(--text2); font-size: 12px; line-height: 1.85; margin-bottom: 22px; max-width: 600px; }
+
+  .footer {
+    background: var(--bg2); border-top: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 10px; color: var(--text3);
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--coral-dim); }
+
+  @media (max-width: 640px) {
+    .window { margin: 10px; }
+    .content { padding: 20px 16px; }
+    .info-table { grid-template-columns: 90px 1fr; }
+    .ascii { font-size: 7.5px; }
+    .stack-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="window">
+  <div class="titlebar">
+    <div class="dots">
+      <div class="dot r"></div>
+      <div class="dot y"></div>
+      <div class="dot g"></div>
+    </div>
+    <div class="titlebar-title">moyed — portfolio</div>
+    <div class="online-badge">
+      <div class="online-dot"></div>
+      online
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn active" onclick="show('about',this)">[about]</button>
+    <button class="nav-btn" onclick="show('certs',this)">[certs]</button>
+    <button class="nav-btn" onclick="show('repos',this)">[repos]</button>
+    <button class="nav-btn" onclick="show('stack',this)">[stack]</button>
+    <button class="nav-btn" onclick="show('goals',this)">[goals]</button>
+    <button class="nav-btn" onclick="show('contact',this)">[contact]</button>
+  </div>
+
+  <div class="content">
+
+    <!-- ABOUT -->
+    <div class="sec active" id="sec-about">
+      <div class="ascii"> __  __                    _
+|  \/  | ___  _   _  ___  __| |
+| |\/| |/ _ \| | | |/ _ \/ _` |
+| |  | | (_) | |_| |  __/ (_| |
+|_|  |_|\___/ \__, |\___|\__,_|
+               |___/</div>
+      <div class="ascii-sub">Moyed Alaybani<span class="cursor"></span></div>
+
+      <div class="hero-role">AI Engineer</div>
+      <div class="hero-bio">
+        Building intelligent systems, automating workflows, and developing software projects focused on AI and modern technologies.
+      </div>
+
+      <div class="info-table">
+        <span class="il">based</span><span class="iv">Riyadh, Saudi Arabia</span>
+        <span class="il">studying</span><span class="iv">B.Sc. Computer Science · Majmaah University</span>
+        <span class="il">status</span><span class="iv acc">open to opportunities</span>
+      </div>
+
+      <div style="font-size:11px; color:var(--text3); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.05em;">Current Focus</div>
+      <div class="focus-item">AI Engineering</div>
+      <div class="focus-item">MLOps & Automation</div>
+      <div class="focus-item">Self-Hosted AI Systems</div>
+    </div>
+
+    <!-- CERTS -->
+    <div class="sec" id="sec-certs">
+      <div class="sec-header">
+        <span class="sec-title">certifications</span>
+        <span>4 verified</span>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-left">
+          <div class="cert-name">Fundamentals of Artificial Intelligence</div>
+          <div class="cert-issuer">SDAIA — Saudi Data and AI Authority</div>
+          <div class="cert-tags">
+            <span class="tag">Artificial Intelligence</span>
+            <span class="tag">Data Analysis</span>
+          </div>
+        </div>
+        <div class="cert-right">
+          <span class="cert-badge">verified ✓</span>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-left">
+          <div class="cert-name">The Structured Query Language (SQL)</div>
+          <div class="cert-issuer">Coursera — University of Michigan</div>
+          <div class="cert-tags">
+            <span class="tag">Advanced SQL</span>
+            <span class="tag">Query Writing</span>
+            <span class="tag">Data Analysis</span>
+          </div>
+        </div>
+        <div class="cert-right">
+          <span class="cert-badge">verified ✓</span>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-left">
+          <div class="cert-name">Introduction to AI Concepts</div>
+          <div class="cert-issuer">Microsoft</div>
+          <div class="cert-tags">
+            <span class="tag">Generative AI</span>
+            <span class="tag">Responsible AI</span>
+          </div>
+        </div>
+        <div class="cert-right">
+          <span class="cert-badge">verified ✓</span>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-left">
+          <div class="cert-name">Make Agentic AI Work For You</div>
+          <div class="cert-issuer">IBM</div>
+          <div class="cert-tags">
+            <span class="tag">Agentic AI</span>
+            <span class="tag">LLMs</span>
+            <span class="tag">Automation</span>
+          </div>
+        </div>
+        <div class="cert-right">
+          <span class="cert-badge">verified ✓</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPOS -->
+    <div class="sec" id="sec-repos">
+      <div class="sec-header">
+        <span class="sec-title">repositories</span>
+        <span>5 public</span>
+      </div>
+
+      <a class="repo-card" href="https://github.com/AbooHazza/Airline-System-Management" target="_blank">
+        <div class="repo-header">
+          <div class="repo-name">📁 Airline-System-Management</div>
+          <span class="repo-arrow">↗</span>
+        </div>
+        <div class="repo-desc">C++ project simulating an airline management system using Stack, Queue, and Linked List — built as part of a Data Structures course.</div>
+        <div class="repo-footer">
+          <div class="lang-dot" style="background:#f34b7d"></div>
+          <span class="lang-label">C++</span>
+          <span class="tag">Data Structures</span><span class="tag">OOP</span>
+        </div>
+      </a>
+
+      <a class="repo-card" href="https://github.com/AbooHazza/Course-Management-System-SQL" target="_blank">
+        <div class="repo-header">
+          <div class="repo-name">📁 Course-Management-System-SQL</div>
+          <span class="repo-arrow">↗</span>
+        </div>
+        <div class="repo-desc">SQL-based course management system for handling students, courses, and registrations.</div>
+        <div class="repo-footer">
+          <div class="lang-dot" style="background:#e38c00"></div>
+          <span class="lang-label">SQL</span>
+          <span class="tag">Database</span><span class="tag">CRUD</span>
+        </div>
+      </a>
+
+      <a class="repo-card" href="https://github.com/AbooHazza/Phone-Book-Python" target="_blank">
+        <div class="repo-header">
+          <div class="repo-name">📁 Phone-Book-Python</div>
+          <span class="repo-arrow">↗</span>
+        </div>
+        <div class="repo-desc">CLI phone book application built with Python using dictionaries and modular functions.</div>
+        <div class="repo-footer">
+          <div class="lang-dot" style="background:#3572A5"></div>
+          <span class="lang-label">Python</span>
+          <span class="tag">CLI</span><span class="tag">Modular</span>
+        </div>
+      </a>
+
+      <a class="repo-card" href="https://github.com/AbooHazza/todo-list-cpp" target="_blank">
+        <div class="repo-header">
+          <div class="repo-name">📁 todo-list-cpp</div>
+          <span class="repo-arrow">↗</span>
+        </div>
+        <div class="repo-desc">Simple To-Do List application using Linked List and Classes in C++.</div>
+        <div class="repo-footer">
+          <div class="lang-dot" style="background:#f34b7d"></div>
+          <span class="lang-label">C++</span>
+          <span class="tag">Linked List</span><span class="tag">Classes</span>
+        </div>
+      </a>
+
+      <a class="repo-card" href="https://github.com/AbooHazza/cpp-projects" target="_blank">
+        <div class="repo-header">
+          <div class="repo-name">📁 cpp-projects</div>
+          <span class="repo-arrow">↗</span>
+        </div>
+        <div class="repo-desc">Collection of C++ practice projects and data structure implementations.</div>
+        <div class="repo-footer">
+          <div class="lang-dot" style="background:#f34b7d"></div>
+          <span class="lang-label">C++</span>
+          <span class="tag">Practice</span><span class="tag">Algorithms</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- STACK -->
+    <div class="sec" id="sec-stack">
+      <div class="sec-header">
+        <span class="sec-title">tech stack</span>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-group">
+          <div class="stack-title">// languages</div>
+          <span class="stag">Python</span>
+          <span class="stag">C++</span>
+          <span class="stag">SQL</span>
+        </div>
+        <div class="stack-group">
+          <div class="stack-title">// tools</div>
+          <span class="stag">Git</span>
+          <span class="stag">GitHub</span>
+          <span class="stag">VS Code</span>
+          <span class="stag">Power BI</span>
+        </div>
+        <div class="stack-group">
+          <div class="stack-title">// ai / mlops</div>
+          <span class="stag">AI Engineering</span>
+          <span class="stag">MLOps</span>
+          <span class="stag">Agentic AI</span>
+        </div>
+        <div class="stack-group">
+          <div class="stack-title">// concepts</div>
+          <span class="stag">Data Structures</span>
+          <span class="stag">OOP</span>
+          <span class="stag">Algorithms</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOALS -->
+    <div class="sec" id="sec-goals">
+      <div class="sec-header">
+        <span class="sec-title">ai learning roadmap</span>
+        <span>phase 1 / 4 active</span>
+      </div>
+      <div class="goal-item">
+        <span class="goal-num">01</span>
+        <div class="goal-body">
+          <div class="goal-name">Python Mastery</div>
+          <div class="goal-desc">CS50P (Harvard), core Python, OOP, file I/O, libraries & packaging</div>
+        </div>
+        <span class="goal-status status-active">in progress</span>
+      </div>
+      <div class="goal-item">
+        <span class="goal-num">02</span>
+        <div class="goal-body">
+          <div class="goal-name">Data Science Tools</div>
+          <div class="goal-desc">NumPy, Pandas, Matplotlib, Seaborn — working with real datasets</div>
+        </div>
+        <span class="goal-status status-next">next</span>
+      </div>
+      <div class="goal-item">
+        <span class="goal-num">03</span>
+        <div class="goal-body">
+          <div class="goal-name">Machine Learning</div>
+          <div class="goal-desc">Scikit-learn, regression, classification, clustering, model evaluation</div>
+        </div>
+        <span class="goal-status status-next">next</span>
+      </div>
+      <div class="goal-item">
+        <span class="goal-num">04</span>
+        <div class="goal-body">
+          <div class="goal-name">Deep Learning</div>
+          <div class="goal-desc">TensorFlow / PyTorch, CNNs, transformers, AI agents</div>
+        </div>
+        <span class="goal-status status-next">next</span>
+      </div>
+      <div class="goal-item">
+        <span class="goal-num">05</span>
+        <div class="goal-body">
+          <div class="goal-name">Agentic AI</div>
+          <div class="goal-desc">Autonomous AI workflows — IBM Agentic AI certificate completed</div>
+        </div>
+        <span class="goal-status status-done">cert ✓</span>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="sec" id="sec-contact">
+      <div class="sec-header">
+        <span class="sec-title">connect</span>
+        <span>always open</span>
+      </div>
+      <a class="contact-link" href="https://github.com/AbooHazza" target="_blank">
+        <span class="contact-icon">⌥</span>
+        <span class="contact-lbl">github</span>
+        <span class="contact-val">github.com/AbooHazza</span>
+        <span class="contact-arr">↗</span>
+      </a>
+      <a class="contact-link" href="https://www.linkedin.com/in/moyed-alaybani-25a4a437b/" target="_blank">
+        <span class="contact-icon">⌘</span>
+        <span class="contact-lbl">linkedin</span>
+        <span class="contact-val">moyed-alaybani</span>
+        <span class="contact-arr">↗</span>
+      </a>
+      <div class="contact-note">
+        <span>→</span> open to internships, collaborations, and AI projects<br>
+        <span>→</span> Riyadh, Saudi Arabia · UTC+3
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span>© 2026 Moyed Alaybani</span>
+    <span>built with html · css · vanilla js</span>
+    <span id="clock"></span>
+  </div>
+</div>
+
+<script>
+  function show(id, btn) {
+    document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('sec-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+  function updateClock() {
+    const t = new Date().toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Asia/Riyadh' });
+    document.getElementById('clock').textContent = 'Riyadh ' + t;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+</body>
+</html>
