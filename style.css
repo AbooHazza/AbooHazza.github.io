@@ -104,7 +104,7 @@ body::before {
 .hero-role {
   font-size: 13px;
   font-weight: 700;
-  color: var(--text);
+  color: var(--coral-light); 
   margin-bottom: 12px;
 }
 .hero-role .acc {
