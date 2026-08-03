@@ -1,5 +1,3 @@
-#  Moyed Alaybani 
----
 
 ##  Overview
 
@@ -16,17 +14,17 @@ This portfolio features a sleek, fast, and modular structure using **Vanilla Jav
 
 ```text
 portfolio/
-├── index.html            # Main container & UI wrapper
-├── style.css             # Theme variables, layouts & terminal styling
-├── script.js             # Fetch API logic, keyboard events & live clock
-├── README.md             # Project documentation
-└── sections/             # Standalone modular HTML sections
+├── index.html          # Main container & UI wrapper
+├── style.css           # Theme variables, layouts & terminal styling
+├── script.js           # Fetch API logic, keyboard events & live clock
+├── README.md           # Project documentation
+└── sections/           # Standalone modular HTML sections
     ├── about.html        # Bio, ASCII header, & basic info
-    ├── certs.html        # Verified certifications (SDAIA, IBM, Microsoft, Coursera)
-    ├── repos.html        # Featured GitHub repositories & projects
-    ├── stack.html        # Tech stack & languages
-    ├── goals.html        # AI learning roadmap
-    └── contact.html      # Social links & contact info
+    ├── certs.html        
+    ├── repos.html       
+    ├── stack.html        
+    ├── goals.html        
+    └── contact.html      
 ```
 
 © 2026 Moyed Alaybani.
