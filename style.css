@@ -101,10 +101,10 @@ body::before {
 }
 
 /* HERO ROLE */
-.hero-role {
+.hero-role, .hero-role .acc {
+  color: var(--coral) !important;
   font-size: 13px;
   font-weight: 700;
-  color: var(--coral-light); 
   margin-bottom: 12px;
 }
 .hero-role .acc {
